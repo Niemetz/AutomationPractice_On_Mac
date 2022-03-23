@@ -35,11 +35,6 @@ public class DefinitionSteps {
         user.enters_inputX_into_the_elementY_input_field(inputValue, gherkinElement);
     }
 
-    @When("^user moves the cursor over the \"([^\"]*)\" button$")
-    public void moves_the_cursor_over_the_X_Element(String accountAndLists) throws Throwable {
-        user.moves_the_cursor_over_the_X_Element(accountAndLists);
-    }
-
     @Then("^user verifies that the value of the \"([^\"]*)\" field is \"([^\"]*)\"$")
     public void user_verifies_that_the_value_of_the_field_is(String gherkinElement, String gherkinValue)
             throws Throwable {

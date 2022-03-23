@@ -77,9 +77,7 @@ public class EndUserSteps extends ScenarioSteps {
         this.pageName = gherkinPageName.toLowerCase();
         currentPage = getCurrentPage(this.pageName);
         currentPage.getElement("page unique element");
-        System.out.println("Current Page         = " + currentPage);
-        System.out.println("Elelment's CSS Path  = " + currentPage.getElement("page unique element"));
-
+ 
     }
 
     @Step("User should see '{0}' at the '{1}' field")
@@ -88,37 +86,6 @@ public class EndUserSteps extends ScenarioSteps {
         currentPage.getElement(gherkinElement).sendKeys(gherkinInputValue);
     }
 
-    public void moves_the_cursor_over_the_X_Element(String accountAndLists) throws Throwable {
-        Actions action = new Actions(getDriver());
-        action.moveToElement(currentPage.getElement(accountAndLists)).build().perform();
-    }
-
-    public String getCurrentLocalDateTimeStamp() {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-    }
-
-//`	public void clicks_on_the_link_from_the_menu(String gherkinElement, String gherkinMenu) throws Throwable {
-//		String startTime = getCurrentLocalDateTimeStamp();
-//
-//		List<WebElementFacade> listContents = currentPage.getElement(gherkinMenu).thenFindAll("a span");
-//		if (listContents.get(listContents.size() - 1).getText().equalsIgnoreCase(gherkinElement))
-//			listContents.get(listContents.size() - 1).click();`
-
-    // listContents.get(listContents.size()-1).click();
-    // for(WebElementFacade item : listContents)
-    // {
-    // //System.out.println("Element Text = " + item.getText());
-    // if(item.getText().equalsIgnoreCase(gherkinElement))
-    // {
-    // item.click();
-    // break;
-    // }
-    // }
-
-    // currentPage.getElement(gherkinMenu).findElement(By.linkText(gherkinElement)).click();
-//		String endTime = getCurrentLocalDateTimeStamp();
-//		System.out.println("Total Time Taken to search the list = " + totalTime(startTime, endTime) + "ms");
-//	}
 
     @Step("User should see '{1}' at the '{0}' field")
     public void verifies_that_the_value_of_the_field_is(String gherkinElement, String gherkinValue) throws Throwable {

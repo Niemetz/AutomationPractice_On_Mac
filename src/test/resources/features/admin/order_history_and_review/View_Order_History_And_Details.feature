@@ -17,6 +17,8 @@ Feature: View order history and details
 
   @View-History-And-Details
   Scenario: user is able to view his/her order history and details
+  Given user navigates to the Automation Practice "Home" website
+  
     Given user navigates to the Automation Practice "Home" website
     Then user lands on the "Home" page
 
