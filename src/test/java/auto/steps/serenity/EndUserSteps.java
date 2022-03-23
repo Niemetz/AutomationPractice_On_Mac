@@ -90,7 +90,6 @@ public class EndUserSteps extends ScenarioSteps {
     @Step("User should see '{1}' at the '{0}' field")
     public void verifies_that_the_value_of_the_field_is(String gherkinElement, String gherkinValue) throws Throwable {
         String actualValue = currentPage.getElement(gherkinElement).waitUntilVisible().getText();
-        System.out.println("Found... Field " + "\"" + gherkinElement + "\"" + "\'s value is: " + actualValue);
     }
 
 }
