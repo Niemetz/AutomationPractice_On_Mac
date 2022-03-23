@@ -5,45 +5,56 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import net.serenitybdd.core.pages.WebElementFacade;
+import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.pages.PageObject;
 
 public class AmazonBasePageObject extends PageObject {
-	protected final Map<String, String> mapTable = new HashMap<>();
+    @Managed
+    WebDriver driver;
 
-	public AmazonBasePageObject() {
-		mapTable.clear();
-	}
+    protected final Map<String, String> mapTable = new HashMap<>();
 
-	// Get a single element on the page
-	public WebElementFacade getElement(String gherkinElement) {
-		return $(mapTable.get(gherkinElement.toLowerCase())).waitUntilPresent().and().waitUntilVisible().and()
-				.waitUntilEnabled();
-	}
+    //protected final Map<String, WebElementFacade> elementMap = new HashMap<String, WebElementFacade>();
 
-	public void verifyThatAllExpectedElementsAreDisplayedOnPage(String pageName) {
-		int i = 0;
-		System.out.println("============================================");
-		System.out.println("Verifying all expected Elelments on the " + "\"" + pageName + "\"" + " page...");
-		for (Entry<String, String> entry : mapTable.entrySet()) {
-			if (!entry.getKey().equalsIgnoreCase("page unique element")) {
-				System.out.println(
-						"  " + ++i + ") " + "Verifying Element " + "\"" + entry.getKey() + "\"" + " is Displayed ... ");
-				try {
-					Assert.assertNotNull($(entry.getValue()).waitUntilVisible().and().waitUntilEnabled());
-					System.out.println("  **** PASSED:   Element " + "\"" + entry.getKey() + "\"" + " FOUND ... ");
-					System.out.println("  ============================================");
-				} catch (Exception e) {
-					error_Element_is_Not_On_Page(entry.getKey());
-				}
-			}
-		}
-	}
+    public AmazonBasePageObject() {
+        mapTable.clear();
+    }
 
-	public void error_Element_is_Not_On_Page(String element) {
-		System.err.println("  **** FAILED:   Element " + "\"" + element + "\"" + " is NOT FOUND ...");
-		System.out.println("  ============================================");
-	}
+    // Get a single element on the page
+    public WebElementFacade getElement(String gherkinElement) {
+
+        String targetElement = mapTable.get(gherkinElement.toLowerCase());
+
+        return $(targetElement).waitUntilVisible().and().waitUntilEnabled();
+    }
+
+    public void verifyThatAllExpectedElementsAreDisplayedOnPage(String pageName) {
+        int i = 0;
+        System.out.println("============================================");
+        System.out.println("Verifying all expected Elelments on the " + "\"" + pageName + "\"" + " page...");
+        for (Entry<String, String> entry : mapTable.entrySet()) {
+            if (!entry.getKey().equalsIgnoreCase("page unique element")) {
+                System.out.println(
+                        "  " + ++i + ") " + "Verifying Element " + "\"" + entry.getKey() + "\"" + " is Displayed ... ");
+                try {
+                    Assert.assertNotNull($(entry.getValue()).waitUntilVisible().and().waitUntilEnabled());
+                    System.out.println("  **** PASSED:   Element " + "\"" + entry.getKey() + "\"" + " FOUND ... ");
+                    System.out.println("  ============================================");
+                } catch (Exception e) {
+                    error_Element_is_Not_On_Page(entry.getKey());
+                }
+            }
+        }
+    }
+
+    public void error_Element_is_Not_On_Page(String element) {
+        System.err.println("  **** FAILED:   Element " + "\"" + element + "\"" + " is NOT FOUND ...");
+        System.out.println("  ============================================");
+    }
 }

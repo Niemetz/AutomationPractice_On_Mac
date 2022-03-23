@@ -2,137 +2,128 @@ package auto.steps.serenity;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
+//import org.jruby.RubyProcess.Sys;
+import org.openqa.selenium.By;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.jruby.RubyProcess.Sys;
-import org.openqa.selenium.By;
+import java.util.Map;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+
 
 import org.openqa.selenium.interactions.Actions;
 
 import auto.pages.AmazonBasePageObject;
+import auto.pages.HomePage;
 import auto.util.TableOfAllPages;
+//import cucumber.api.java.en.Then;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
-
 @SuppressWarnings("serial")
 public class EndUserSteps extends ScenarioSteps {
 
-	String pageName;
-	AmazonBasePageObject currentPage;
+    String pageName;
+    AmazonBasePageObject currentPage;
 
-	// This table is used to store all the instance variables for pages under
-	// BinarySearchTree
-	private static final Map<String, AmazonBasePageObject> allPagesUnderTest = new HashMap<>();
+    // This table is used to store all the instance variables for pages under
+    private static final Map<String, AmazonBasePageObject> allPagesUnderTest = new HashMap<>();
 
-	// This table contains all pages of the app
-	TableOfAllPages tableOfAllPages = new TableOfAllPages();
+    // This table contains all pages of the app
+    TableOfAllPages tableOfAllPages = new TableOfAllPages();
 
-	public EndUserSteps() {
-		super();
-		this.pageName = null;
-		this.currentPage = null;
-	}
+    public EndUserSteps() {
+        super();
+        this.pageName = null;
+        this.currentPage = null;
+    }
 
-	@Step
-	public void navigates_to_page(String gherkinPageName) throws Throwable {
-		currentPage = getCurrentPage(gherkinPageName);
-		currentPage.open();
-	}
+    @Step
+    public void navigates_to_page(String gherkinPageName) throws Throwable {
+        currentPage = getCurrentPage(gherkinPageName);
+        currentPage.open();
+    }
 
-	@SuppressWarnings("unchecked")
-	public AmazonBasePageObject getCurrentPage(String gherkinPageName) throws ClassNotFoundException {
-		// if the desired page was not registered in the allPageUnderTest,
-		// then add the desired page to the allPageUnderTest.
-		this.pageName = gherkinPageName.toLowerCase();
-		if (!allPagesUnderTest.containsKey(pageName)) {
-			@SuppressWarnings("rawtypes")
-			Class targetPageClass = (Class) tableOfAllPages.getClass(pageName);
-			allPagesUnderTest.put(new String(pageName), (AmazonBasePageObject) getPages().get(targetPageClass));
-		}
-		// return the desired page to the caller
-		return allPagesUnderTest.get(pageName);
-	}
+    @SuppressWarnings("unchecked")
+    public AmazonBasePageObject getCurrentPage(String gherkinPageName) throws ClassNotFoundException {
+        // if the desired page was not registered in the allPageUnderTest,
+        // then add the desired page to the allPageUnderTest.
+        this.pageName = gherkinPageName.toLowerCase();
+        if (!allPagesUnderTest.containsKey(pageName)) {
+            @SuppressWarnings("rawtypes")
+            Class targetPageClass = (Class) tableOfAllPages.getClass(pageName);
+            allPagesUnderTest.put(new String(pageName), (AmazonBasePageObject) getPages().get(targetPageClass));
+        }
+        // return the desired page to the caller
+        return allPagesUnderTest.get(pageName);
+    }
 
-	public void clicks_on_elementX(String gherkinElement) throws Throwable {
-		currentPage.getElement(gherkinElement).waitUntilVisible().and().waitUntilClickable().click();
-	}
+    @Step("User should be able to click on '{0}' element on the page")
+    public void clicks_on_elementX(String gherkinElement) throws Throwable {
+        // currentPage.getElement(gherkinElement).waitUntilVisible().and().waitUntilClickable().click();
+        currentPage.getElement(gherkinElement).click();
+    }
 
-	public void lands_on_pageX(String gherkinPageName) throws Throwable {
-		this.pageName = gherkinPageName.toLowerCase();
-		currentPage = getCurrentPage(this.pageName);
-		currentPage.getElement("page unique element");
-		System.out.println("Current Page         = " + currentPage);
-		System.out.println("Elelment's CSS Path  = " + currentPage.getElement("page unique element"));
+    @Step("User should land on the '{0}' page")
+    public void lands_on_pageX(String gherkinPageName) throws Throwable {
+        this.pageName = gherkinPageName.toLowerCase();
+        currentPage = getCurrentPage(this.pageName);
+        currentPage.getElement("page unique element");
+        System.out.println("Current Page         = " + currentPage);
+        System.out.println("Elelment's CSS Path  = " + currentPage.getElement("page unique element"));
 
-	}
+    }
 
-	public void enters_inputX_into_the_elementY_input_field(String gherkinInputValue, String gherkinElement)
-			throws Throwable {
-		currentPage.getElement(gherkinElement).waitUntilVisible().and().waitUntilEnabled().sendKeys(gherkinInputValue);
-	}
+    @Step("User should see '{0}' at the '{1}' field")
+    public void enters_inputX_into_the_elementY_input_field(String gherkinInputValue, String gherkinElement)
+            throws Throwable {
+        currentPage.getElement(gherkinElement).sendKeys(gherkinInputValue);
+    }
 
-	public void verifyThatAllExpectedElementsAreDisplayedOnPage() {
-		currentPage.verifyThatAllExpectedElementsAreDisplayedOnPage(this.pageName);
-	}
+    public void moves_the_cursor_over_the_X_Element(String accountAndLists) throws Throwable {
+        Actions action = new Actions(getDriver());
+        action.moveToElement(currentPage.getElement(accountAndLists)).build().perform();
+    }
 
-	public void moves_the_cursor_over_the_X_Element(String accountAndLists) throws Throwable {
-		Actions action = new Actions(getDriver());
-		action.moveToElement(currentPage.getElement(accountAndLists)).build().perform();
-	}
+    public String getCurrentLocalDateTimeStamp() {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
+    }
 
-	public String getCurrentLocalDateTimeStamp() {
-		return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));
-	}
+//`	public void clicks_on_the_link_from_the_menu(String gherkinElement, String gherkinMenu) throws Throwable {
+//		String startTime = getCurrentLocalDateTimeStamp();
+//
+//		List<WebElementFacade> listContents = currentPage.getElement(gherkinMenu).thenFindAll("a span");
+//		if (listContents.get(listContents.size() - 1).getText().equalsIgnoreCase(gherkinElement))
+//			listContents.get(listContents.size() - 1).click();`
 
-	public int totalTime(String startTime, String endTime) {
-		int totalTime = Integer.parseInt(endTime.split("\\.")[1]) - Integer.parseInt(startTime.split("\\.")[1]);
-		if (totalTime < 0)
-			totalTime = totalTime + 1000;
-		return totalTime;
-	}
+    // listContents.get(listContents.size()-1).click();
+    // for(WebElementFacade item : listContents)
+    // {
+    // //System.out.println("Element Text = " + item.getText());
+    // if(item.getText().equalsIgnoreCase(gherkinElement))
+    // {
+    // item.click();
+    // break;
+    // }
+    // }
 
-	public void clicks_on_the_link_from_the_menu(String gherkinElement, String gherkinMenu) throws Throwable {
-		String startTime = getCurrentLocalDateTimeStamp();
+    // currentPage.getElement(gherkinMenu).findElement(By.linkText(gherkinElement)).click();
+//		String endTime = getCurrentLocalDateTimeStamp();
+//		System.out.println("Total Time Taken to search the list = " + totalTime(startTime, endTime) + "ms");
+//	}
 
-		List<WebElementFacade> listContents = currentPage.getElement(gherkinMenu).thenFindAll("a span");
-		if (listContents.get(listContents.size() - 1).getText().equalsIgnoreCase(gherkinElement))
-			listContents.get(listContents.size() - 1).click();
+    @Step("User should see '{1}' at the '{0}' field")
+    public void verifies_that_the_value_of_the_field_is(String gherkinElement, String gherkinValue) throws Throwable {
+        String actualValue = currentPage.getElement(gherkinElement).waitUntilVisible().getText();
+        System.out.println("Found... Field " + "\"" + gherkinElement + "\"" + "\'s value is: " + actualValue);
+    }
 
-		// listContents.get(listContents.size()-1).click();
-		// for(WebElementFacade item : listContents)
-		// {
-		// //System.out.println("Element Text = " + item.getText());
-		// if(item.getText().equalsIgnoreCase(gherkinElement))
-		// {
-		// item.click();
-		// break;
-		// }
-		// }
-
-		// currentPage.getElement(gherkinMenu).findElement(By.linkText(gherkinElement)).click();
-		String endTime = getCurrentLocalDateTimeStamp();
-		System.out.println("Total Time Taken to search the list = " + totalTime(startTime, endTime) + "ms");
-	}
-
-	public void verifies_that_the_value_of_the_field_is(String gherkinElement, String gherkinValue) throws Throwable {
-		String actualValue = currentPage.getElement(gherkinElement).waitUntilVisible().getText();
-		System.out.println("Found... Field " + "\"" + gherkinElement + "\"" + "\'s value is: " + actualValue);
-	}
-
-	public void user_logs_out() throws Exception {
-		
-		getDriver().close();
-		getDriver().quit();
-	}
 }
