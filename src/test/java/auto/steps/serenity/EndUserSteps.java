@@ -68,7 +68,6 @@ public class EndUserSteps extends ScenarioSteps {
 
     @Step("User should be able to click on '{0}' element on the page")
     public void clicks_on_elementX(String gherkinElement) throws Throwable {
-        // currentPage.getElement(gherkinElement).waitUntilVisible().and().waitUntilClickable().click();
         currentPage.getElement(gherkinElement).click();
     }
 
