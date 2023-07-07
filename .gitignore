@@ -4,6 +4,7 @@ pom.xml
 .classpath
 .DS_Store
 .project
+.idea
 build.gradle
 build.properties
 log4j.properties
